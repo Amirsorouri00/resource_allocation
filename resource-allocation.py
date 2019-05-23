@@ -82,9 +82,7 @@ def Allocate(round, Demand, Alloc):
         sorted.remove(sorted[sorted.index(element)])
 
         idd = index[-1]
-        # print(idd)
         index.remove(index[index.index(idd)])
-        # print(index)
 
         need = math.ceil(element/10)
         users_count = users_count+1
@@ -94,13 +92,11 @@ def Allocate(round, Demand, Alloc):
             if flag == False:
                 print("LOOP Detected")
                 break
-            # print("need[{0}]: ".format(cnt), need)
             if need == 0:
                 break
         Demand[Demand.index(idd)] = 0
-        # print("Alloc[{0}]".format(round))
-        print(Alloc)
-        break
+        print("Alloc[{0}]".format(round), Alloc)
+        # break
     return check_end(Demand)
 
 def main():  
