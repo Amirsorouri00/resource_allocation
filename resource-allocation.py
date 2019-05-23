@@ -3,24 +3,18 @@ import math
 
 
 def selectsort(Demand):
-    A = Demand
-    # Traverse through all array elements 
-    for i in range(len(A)): 
-        # Find the minimum element in remaining  
-        # unsorted array 
-        min_idx = i 
-        for j in range(i+1, len(A)): 
-            if A[min_idx] > A[j]: 
-                min_idx = j 
-                
-        # Swap the found minimum element with  
-        # the first element         
-        A[i], A[min_idx] = A[min_idx], A[i]
-    return A
+    X = Demand
+    for i in range(len(X)):
+     min_index = i
+     for j in range(i+1, len(X)):
+       if X[min_index] > X[j]:
+         min_index = j
+     X[i], X[min_index] = X[min_index], X[i]
+    return X
 
 def check_end(Demand):
     for i in range(0, len(Demand)):
-        if Demand[i] == 0:
+        if Demand[i] != 0:
             return False
     return True
 
@@ -36,7 +30,6 @@ def analyze_vector(current_row, g1_counter, freed_num):
         else:
             if check_group(current_row[i]):
                 g1_counter+=1
-    print(freed_num, g1_counter)
     return g1_counter, freed_num
 
 def put(Alloc, idd, num):
@@ -46,17 +39,14 @@ def put(Alloc, idd, num):
     g1_counter = 0
     freed = 0
 
-
     for row in range(0,9):
         g1_counter, freed =  analyze_vector(Alloc[row], g1_counter, freed)
-        print(g1_counter, freed)
         if 0 == freed:
             continue
-        print(check_group(idd))
         if 1 == check_group(idd):
             if(g1_counter == 15):
                 continue
-        for column in range(0,23):
+        for column in range(0,24):
             if(Alloc[row][column] == -1 and counter < num):
                 flag = True
                 Alloc[row][column] = idd
@@ -72,7 +62,8 @@ def put(Alloc, idd, num):
         if fflag == True:
             break
     num = num - counter
-    return flag
+    
+    return flag, num
 
 def Allocate(round, Demand, Alloc):
     need = 0
@@ -91,41 +82,42 @@ def Allocate(round, Demand, Alloc):
         sorted.remove(sorted[sorted.index(element)])
 
         idd = index[-1]
-        print(idd)
+        # print(idd)
         index.remove(index[index.index(idd)])
-        print(index)
+        # print(index)
 
         need = math.ceil(element/10)
         users_count = users_count+1
-        
+        cnt = 0
         while True:
-            flag = put(Alloc, idd, need)
+            flag, need = put(Alloc, idd, need)
             if flag == False:
                 print("LOOP Detected")
                 break
-            if need != 0:
+            # print("need[{0}]: ".format(cnt), need)
+            if need == 0:
                 break
         Demand[Demand.index(idd)] = 0
-        print("Alloc[{0}]".format(round))
+        # print("Alloc[{0}]".format(round))
         print(Alloc)
         break
     return check_end(Demand)
 
-def main():
-    Demand = []
-    Alloc = []
-    # print(Alloc)
-    i = 0
+def main():  
     myround = 0
+    Demand = []
+    Alloc = []  
     for i in range(0,9):
         Demand.append(random.randint(1,250))
-        i = i+1
-    
     while True:
+        print("Demand before: ", Demand)
         Alloc = [[-1 for item in range(0,24)] for item in range(0,9)]
         Allocate(myround,Demand, Alloc)
         myround+=1
-        if check_end != False:
+        print("Demand after: ", Demand)
+        print("check_end: ", check_end(Demand))
+        print("-----------------------------------------------------------------------------------------------------")
+        if check_end(Demand) != False:
             break
     return
 
